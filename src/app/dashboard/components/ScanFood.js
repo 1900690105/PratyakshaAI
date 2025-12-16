@@ -8,6 +8,7 @@ import { OCRUploader } from "@/app/components/OCRUploader";
 import BarcodeScanner from "@/app/components/BarcodeScanner";
 import ProductInfo from "./ProductInfo";
 import { FaUserMd } from "react-icons/fa";
+import { getProductByBarcode, saveProductToCache } from "@/lib/productCache";
 import { ForMeAnalysisCard } from "./PersonalizeData";
 
 export function ScanFood() {
@@ -41,6 +42,7 @@ export function ScanFood() {
         body: JSON.stringify({
           userProfile,
           product: data,
+          uid: "a5KdQQZlqtbTa0FAkdduWJhG2SB3",
         }),
       });
 
@@ -65,10 +67,24 @@ export function ScanFood() {
   };
 
   const handleDetected = async (code) => {
-    alert(code);
     try {
       setLoading(true);
 
+      /* -------------------------------
+       1️⃣ CHECK FIRESTORE FIRST
+    -------------------------------- */
+      const cachedProduct = await getProductByBarcode(code);
+
+      if (cachedProduct?.raw_json) {
+        const product = JSON.parse(cachedProduct.raw_json);
+        setData(product);
+      } else {
+        alert("no data availble in");
+      }
+
+      /* -------------------------------
+       2️⃣ FETCH FROM OPENFOODFACTS
+    -------------------------------- */
       const res = await fetch(
         `https://world.openfoodfacts.org/api/v2/product/${code}.json`
       );
@@ -86,6 +102,14 @@ export function ScanFood() {
 
       const product = result.product;
 
+      /* -------------------------------
+       3️⃣ SAVE TO FIRESTORE
+    -------------------------------- */
+      await saveProductToCache(code, product);
+
+      /* -------------------------------
+       4️⃣ UPDATE UI
+    -------------------------------- */
       setData(product);
     } catch (err) {
       console.error(err);
