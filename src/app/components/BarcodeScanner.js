@@ -70,7 +70,6 @@ export default function BarcodeScanner({ onDetected }) {
     }
   };
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => stopCamera();
   }, []);
