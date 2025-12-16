@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { BrowserMultiFormatReader } from "@zxing/browser";
 import { Camera, Upload, Loader2 } from "lucide-react";
-import Image from "next/image";
 
 export default function BarcodeScanner({ onDetected }) {
   const videoRef = useRef(null);
@@ -84,7 +83,7 @@ export default function BarcodeScanner({ onDetected }) {
       </h2>
 
       {/* VIDEO SCANNER WINDOW */}
-      <div className="md:w-full w-[250px]  aspect-video bg-black rounded-lg overflow-hidden relative">
+      <div className="md:w-[400px] w-[250px]  aspect-video bg-black rounded-lg overflow-hidden relative">
         <video ref={videoRef} className="w-full h-full object-cover" />
 
         {scanning && (
@@ -98,7 +97,7 @@ export default function BarcodeScanner({ onDetected }) {
       {error && <p className="text-red-600 text-sm">{error}</p>}
 
       {/* BUTTONS */}
-      <div className="flex gap-3 flex-col sm:flex-row">
+      <div className="flex gap-3 flex-col sm:flex-row md:w-[400px] w-[250px]">
         <button
           onClick={startScanner}
           className="flex-1 bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition"

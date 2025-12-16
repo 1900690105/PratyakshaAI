@@ -1,24 +1,64 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Camera,
-  FileText,
-  QrCode,
-  ScanLine,
-  Loader2,
-  Image as ImageIcon,
-} from "lucide-react";
+import { FileText, QrCode, Loader2, Image } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { OCRUploader } from "@/app/components/OCRUploader";
 import BarcodeScanner from "@/app/components/BarcodeScanner";
 import ProductInfo from "./ProductInfo";
+import { FaUserMd } from "react-icons/fa";
+import { ForMeAnalysisCard } from "./PersonalizeData";
 
 export function ScanFood() {
   const [activeTab, setActiveTab] = useState("barcode");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
+  const [analysis, setAnalysis] = useState(null);
+  const [analyzing, setAnalyzing] = useState(false);
+
+  const userProfile = {
+    age: 28,
+    gender: "Male",
+    conditions: ["Diabetes"],
+    allergies: ["Milk", "Soy"],
+    diet: "Low Sugar",
+    goal: "Weight loss",
+  };
+
+  const handleForMe = async () => {
+    if (!data) {
+      alert("Please scan a product first");
+      return;
+    }
+
+    try {
+      setAnalyzing(true);
+
+      const res = await fetch("/api/for-me-analysis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userProfile,
+          product: data,
+        }),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.error || "Analysis failed");
+      }
+
+      console.log("For Me Analysis:", result);
+      setAnalysis(result);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to analyze product for you");
+    } finally {
+      setAnalyzing(false);
+    }
+  };
 
   const handleExtract = (text) => {
     console.log("Extracted text:", text);
@@ -26,21 +66,35 @@ export function ScanFood() {
 
   const handleDetected = async (code) => {
     try {
+      setLoading(true);
+
       const res = await fetch(
         `https://world.openfoodfacts.org/api/v2/product/${code}.json`
       );
+
       if (!res.ok) {
         throw new Error("OpenFoodFacts request failed");
       }
-      const data = await res.json();
-      if (data.status !== 1) {
-        return null; // product not found
+
+      const result = await res.json();
+
+      if (result.status !== 1) {
+        alert("Product not found");
+        return;
       }
-      console.log(data.product);
-      setData(data.product);
+
+      const product = result.product;
+
+      // ✅ Save to Firestore
+      // await saveProductToFirestore(code, product);
+
+      // ✅ Update UI
+      setData(product);
     } catch (err) {
       console.error(err);
-      alert("Something went wrong");
+      alert("Something went wrong while fetching product");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -104,15 +158,43 @@ export function ScanFood() {
             <>
               <div className="p-6">
                 <BarcodeScanner onDetected={handleDetected} />
-                <Button onClick={() => handleDetected("8901725016296")}>
+                <Button
+                  className="mt-5"
+                  onClick={() => handleDetected("8906010500535")}
+                >
                   Test Scan
                 </Button>
               </div>
+              {loading && (
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Fetching product details...
+                </div>
+              )}
             </>
           )}
-
           <ProductInfo data={data} />
-
+          <div className="flex justify-end">
+            <Button
+              onClick={handleForMe}
+              disabled={analyzing}
+              className="bg-indigo-600 p-5 w-44 h-12 flex gap-2 items-center"
+            >
+              {analyzing ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Analyzing
+                </>
+              ) : (
+                <>
+                  <FaUserMd />
+                  For Me
+                </>
+              )}
+            </Button>
+          </div>
+          &&
+          <ForMeAnalysisCard analysis={analysis} />
           {/* SCAN FRAME (OCR Mode) */}
           {activeTab === "ocr" && (
             <div className="p-6">
@@ -123,7 +205,6 @@ export function ScanFood() {
               />
             </div>
           )}
-
           {/* Optional Info */}
           <div className="text-center text-gray-500 text-sm">
             {activeTab === "barcode"
