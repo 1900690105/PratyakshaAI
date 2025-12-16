@@ -1,6 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.openfoodfacts.net",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.openfoodfacts.org",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
