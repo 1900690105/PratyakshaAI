@@ -3,7 +3,7 @@ import Image from "next/image";
 function ProductInfo({ data }) {
   if (!data) return null;
 
-  const product = data; // ✅ IMPORTANT FIX
+  const product = data;
 
   return (
     <div className="mt-6 bg-white rounded-xl shadow p-5 space-y-4">
