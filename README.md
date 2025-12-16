@@ -1,53 +1,74 @@
 🧠 PratyakshaAI
+Intelligent Food Health Analysis Powered by AI
 
-AI-Powered Food Health & Nutrition Analyzer
+PratyakshaAI is an AI-driven food intelligence platform that helps individuals make safer, healthier food choices by analyzing packaged food products against their personal health profile.
 
-PratyakshaAI helps users make informed food choices by scanning food barcodes or ingredient labels and analyzing them based on personal health profiles using AI.
+Using barcode scanning, OCR, verified nutrition databases, and generative AI, PratyakshaAI delivers clear, personalized dietary guidance in seconds.
 
-🚀 Features
-🔍 Food Scanning
+🌟 Why PratyakshaAI?
 
-📷 Barcode Scanning (Camera / Image upload)
+Modern food labels are complex, misleading, and difficult to interpret — especially for people managing:
 
-🧾 Ingredient OCR Scan
+Diabetes
 
-🌍 Fetches verified product data from OpenFoodFacts
+Food allergies
 
-🧠 AI-Powered Personal Analysis
+Weight goals
 
-Personalized food suitability analysis using Google Gemini AI
+Special diets (low sugar, keto, vegan, etc.)
 
-Considers:
+PratyakshaAI bridges the gap between food data and personal health.
 
-Health conditions (e.g. Diabetes)
+🚀 Core Capabilities
+🔍 Smart Food Scanning
 
-Allergies
+Barcode scanning via camera or image upload
 
-Diet preferences
+Ingredient OCR from packaging
 
-Weight & health goals
+Global product lookup via OpenFoodFacts
 
-Clear verdict: Good / Moderate / Poor fit
+🧠 AI-Powered Personal Health Analysis
 
-🧬 Nutrition & Ingredient Insights
+Each product is evaluated specifically for the user, considering:
 
-Nutrient levels (Sugar, Fat, Salt, Saturated Fat)
+Health conditions
 
-Additives & allergen detection
+Allergies & sensitivities
 
-NOVA & NutriScore awareness
+Dietary preferences
 
-Health warnings & advice
+Wellness goals
 
-🗂 Smart Data Storage
+The AI returns:
 
-Product caching in Firestore (avoids repeated API calls)
+Overall health fit (Good / Moderate / Poor)
+
+Personalized warnings
+
+Clear dietary advice
+
+Ingredient-level risk assessment
+
+🧬 Deep Nutrition Insights
+
+Sugar, salt, fat & saturated fat levels
+
+Additives & allergens
+
+NOVA food classification
+
+NutriScore awareness
+
+🗂 Intelligent Data Architecture
+
+Global product caching (no repeated API calls)
 
 User-specific AI analysis history
 
-Secure authentication with Firebase
+Secure, scalable Firebase backend
 
-🏗 Tech Stack
+🏗 Technology Stack
 Frontend
 
 Next.js 16 (App Router)
@@ -60,43 +81,37 @@ shadcn/ui
 
 Lucide Icons
 
-Backend
+Backend & AI
 
 Next.js API Routes
 
-Google Gemini API
+Google Gemini AI
 
 OpenFoodFacts API
 
-Database & Auth
+Database & Authentication
 
 Firebase Authentication
 
 Cloud Firestore
 
-📦 Project Structure
-app/
- ├─ api/
- │   ├─ for-me-analysis/       # AI health analysis API
- │   └─ auth/                  # Auth routes
- ├─ components/
- │   ├─ BarcodeScanner.tsx
- │   ├─ OCRUploader.tsx
- │   ├─ ProductInfo.tsx
- │   └─ PersonalizeData.tsx
- ├─ dashboard/
- │   └─ scan-food/
- └─ auth/
-lib/
- ├─ firebase.ts
- ├─ auth.ts
- ├─ cookies.ts
- ├─ productCache.ts
+📦 System Architecture
+User
+ ↓
+Scan (Barcode / OCR)
+ ↓
+Local Cache Check (Firestore)
+ ↓
+OpenFoodFacts (if needed)
+ ↓
+AI Analysis (Gemini)
+ ↓
+Personalized Health Verdict
 
-🗃 Firestore Collections
-users
+🗃 Firestore Data Model
+👤 Users (users)
 
-Stores user profile & health information.
+Stores health profile and preferences.
 
 {
   "uid": "string",
@@ -109,55 +124,28 @@ Stores user profile & health information.
   "goal": "Weight loss"
 }
 
-productdetails (Global Cache)
+📦 Product Cache (productdetails)
 
-Stores full OpenFoodFacts product JSON safely.
+Stores complete product data safely as raw JSON.
 
 {
   "barcode": "8906010502591",
-  "raw_json": "{...stringified product...}",
+  "raw_json": "{...stringified product data...}",
   "createdAt": "timestamp"
 }
 
-airesult
+🤖 AI Analysis Results (airesult)
 
-Stores personalized AI analysis results.
+Stores user-specific AI health evaluations.
 
 {
   "uid": "user_uid",
   "barcode": "8906010502591",
-  "analysis": { ...AI result JSON... },
+  "analysis": { "...AI result JSON..." },
   "createdAt": "timestamp"
 }
 
-🔐 Environment Variables
-
-Create a .env.local file:
-
-NEXT_PUBLIC_FIREBASE_API_KEY=your_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_domain
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_bucket
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
-
-NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key
-
-
-⚠️ Never commit secrets or service account keys to GitHub
-
-🧪 Local Development
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
-
-
-Open:
-👉 http://localhost:3000
-
-🧠 AI Analysis Output Example
+🧠 AI Response Format
 {
   "overall_fit": "poor",
   "health_score": 15,
@@ -167,15 +155,40 @@ Open:
   "final_advice": "This product should be avoided."
 }
 
-🔒 Security Notes
+🔐 Security & Privacy
 
-Firebase cookies are HTTP-only
+🔒 HTTP-only authentication cookies
 
-Product caching avoids unnecessary API calls
+🔐 No secrets committed to source control
 
-AI responses are strictly JSON-validated
+🧾 Strict JSON validation for AI responses
 
-GitHub push protection enabled
+🛡 GitHub secret scanning enabled
+
+⚙️ Environment Setup
+
+Create .env.local:
+
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+
+NEXT_PUBLIC_GEMINI_API_KEY=
+
+
+⚠️ Never commit API keys or service account files
+
+🧪 Local Development
+npm install
+npm run dev
+
+
+Open:
+
+http://localhost:3000
 
 🛣 Roadmap
 
@@ -183,25 +196,28 @@ GitHub push protection enabled
 
 ✅ OCR ingredient scanning
 
-✅ Personalized AI analysis
+✅ Personalized AI health analysis
 
-⏳ Scan history dashboard
+⏳ Scan history & analytics
 
-⏳ Health trend analytics
+⏳ Health trend tracking
 
 ⏳ Offline scanning support
 
 ⏳ Multi-language support
 
-👨‍⚕️ Disclaimer
+⚠️ Medical Disclaimer
 
-PratyakshaAI provides informational insights only and is not a medical diagnosis tool. Always consult a healthcare professional for medical advice.
+PratyakshaAI provides informational guidance only.
+It does not replace professional medical advice.
+Always consult a qualified healthcare provider for medical decisions.
 
 📜 License
 
 MIT License © 2025
 PratyakshaAI
 
-🙌 Author
+👨‍💻 Team
 
-Built with ❤️ by PratyakshaAI Team
+PratyakshaAI
+Building responsible AI for healthier lives.
