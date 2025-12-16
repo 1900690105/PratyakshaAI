@@ -1,5 +1,12 @@
 import { db } from "@/lib/firebase";
-import { doc, setDoc, serverTimestamp, getDoc } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  serverTimestamp,
+  getDoc,
+  addDoc,
+  collection,
+} from "firebase/firestore";
 
 export async function getProductByBarcode(barcode) {
   const ref = doc(db, "productdetails", barcode);
@@ -28,5 +35,13 @@ export async function saveProductToCache(barcode, product) {
 
     createdAt: serverTimestamp(),
     source: "openfoodfacts",
+  });
+}
+
+export async function saveUserScan(uid, barcode) {
+  await addDoc(collection(db, "user_scans"), {
+    uid,
+    barcode,
+    scannedAt: serverTimestamp(),
   });
 }

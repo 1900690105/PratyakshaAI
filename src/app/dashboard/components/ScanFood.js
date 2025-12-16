@@ -8,7 +8,11 @@ import { OCRUploader } from "@/app/components/OCRUploader";
 import BarcodeScanner from "@/app/components/BarcodeScanner";
 import ProductInfo from "./ProductInfo";
 import { FaUserMd } from "react-icons/fa";
-import { getProductByBarcode, saveProductToCache } from "@/lib/productCache";
+import {
+  getProductByBarcode,
+  saveProductToCache,
+  saveUserScan,
+} from "@/lib/productCache";
 import { ForMeAnalysisCard } from "./PersonalizeData";
 
 export function ScanFood() {
@@ -17,6 +21,8 @@ export function ScanFood() {
   const [data, setData] = useState(null);
   const [analysis, setAnalysis] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
+  const [show, setShow] = useState(false);
+  const uid = "a5KdQQZlqtbTa0FAkdduWJhG2SB3";
 
   const userProfile = {
     age: 28,
@@ -77,9 +83,13 @@ export function ScanFood() {
 
       if (cachedProduct?.raw_json) {
         const product = JSON.parse(cachedProduct.raw_json);
+
+        // ✅ Use cached product
         setData(product);
-      } else {
-        alert("no data availble in");
+        setShow(true);
+
+        // ✅ STOP here (important)
+        return;
       }
 
       /* -------------------------------
@@ -103,14 +113,16 @@ export function ScanFood() {
       const product = result.product;
 
       /* -------------------------------
-       3️⃣ SAVE TO FIRESTORE
+       3️⃣ SAVE TO FIRESTORE (productdetails)
     -------------------------------- */
+      await saveUserScan(uid, code);
       await saveProductToCache(code, product);
 
       /* -------------------------------
        4️⃣ UPDATE UI
     -------------------------------- */
       setData(product);
+      setShow(true);
     } catch (err) {
       console.error(err);
       alert("Something went wrong while fetching product");
@@ -125,115 +137,124 @@ export function ScanFood() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Title */}
-      <div>
-        <h1 className="text-3xl font-bold">Scan Food</h1>
-        <p className="text-gray-600 mt-1">
-          Scan barcodes or ingredient lists to reveal food insights instantly.
-        </p>
-      </div>
+    <>
+      <div className="space-y-6">
+        {/* Title */}
+        <div>
+          <h1 className="text-3xl font-bold">Scan Food</h1>
+          <p className="text-gray-600 mt-1">
+            Scan barcodes or ingredient lists to reveal food insights instantly.
+          </p>
+        </div>
 
-      {/* TAB SWITCHER */}
-      <div className="flex gap-4">
-        <Button
-          variant={activeTab === "barcode" ? "default" : "outline"}
-          onClick={() => setActiveTab("barcode")}
-          className="flex items-center gap-2"
-        >
-          <QrCode className="w-4 h-4" />
-          Barcode Scan
-        </Button>
+        {/* TAB SWITCHER */}
+        <div className="flex gap-4">
+          <Button
+            variant={activeTab === "barcode" ? "default" : "outline"}
+            onClick={() => setActiveTab("barcode")}
+            className="flex items-center gap-2"
+          >
+            <QrCode className="w-4 h-4" />
+            Barcode Scan
+          </Button>
 
-        <Button
-          variant={activeTab === "ocr" ? "default" : "outline"}
-          onClick={() => setActiveTab("ocr")}
-          className="flex items-center gap-2"
-        >
-          <FileText className="w-4 h-4" />
-          OCR Scan
-        </Button>
-      </div>
+          <Button
+            variant={activeTab === "ocr" ? "default" : "outline"}
+            onClick={() => setActiveTab("ocr")}
+            className="flex items-center gap-2"
+          >
+            <FileText className="w-4 h-4" />
+            OCR Scan
+          </Button>
+        </div>
 
-      {/* MAIN CONTENT */}
-      <Card className="shadow border">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            {activeTab === "barcode" ? (
-              <>
-                <QrCode className="w-5 h-5 text-emerald-600" />
-                Barcode Scanner
-              </>
-            ) : (
-              <>
-                <FileText className="w-5 h-5 text-indigo-600" />
-                Ingredient OCR Scanner
-              </>
-            )}
-          </CardTitle>
-        </CardHeader>
+        {/* MAIN CONTENT */}
 
-        <CardContent className="space-y-6">
-          {/* SCAN FRAME (Barcode Mode) */}
-          {activeTab === "barcode" && (
-            <>
-              <div className="p-6">
-                <BarcodeScanner onDetected={handleDetected} />
-                <Button
-                  className="mt-5"
-                  onClick={() => handleDetected("8906010502591")}
-                >
-                  Test Scan
-                </Button>
-              </div>
-              {loading && (
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Fetching product details...
-                </div>
-              )}
-            </>
-          )}
-          <ProductInfo data={data} />
-          <div className="flex justify-end">
-            <Button
-              onClick={handleForMe}
-              disabled={analyzing}
-              className="bg-indigo-600 p-5 w-44 h-12 flex gap-2 items-center"
-            >
-              {analyzing ? (
+        <Card className="shadow border">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              {activeTab === "barcode" ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Analyzing
+                  <QrCode className="w-5 h-5 text-emerald-600" />
+                  Barcode Scanner
                 </>
               ) : (
                 <>
-                  <FaUserMd />
-                  For Me
+                  <FileText className="w-5 h-5 text-indigo-600" />
+                  Ingredient OCR Scanner
                 </>
               )}
-            </Button>
-          </div>
+            </CardTitle>
+          </CardHeader>
+          <div className="md:flex md:justify-center">
+            <CardContent className="space-y-6">
+              {/* SCAN FRAME (Barcode Mode) */}
+              {activeTab === "barcode" && (
+                <>
+                  <div className="p-6">
+                    {!show && <BarcodeScanner onDetected={handleDetected} />}
+                    <div>
+                      <Button
+                        className="mt-5 flex gap-3 flex-col sm:flex-row md:w-[400px] w-[250px]"
+                        onClick={() => handleDetected("6111242100992")}
+                      >
+                        Test Scan
+                      </Button>
+                    </div>
+                  </div>
+                  {loading && (
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Fetching product details...
+                    </div>
+                  )}
+                </>
+              )}
+              <ProductInfo data={data} />
+              {show && (
+                <div className="flex justify-end">
+                  <Button
+                    onClick={handleForMe}
+                    disabled={analyzing}
+                    className="bg-indigo-600 p-5 w-44 h-12 flex gap-2 items-center"
+                  >
+                    {analyzing ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Analyzing
+                      </>
+                    ) : (
+                      <>
+                        <FaUserMd />
+                        For Me
+                      </>
+                    )}
+                  </Button>
+                </div>
+              )}
 
-          <ForMeAnalysisCard analysis={analysis} />
-          {/* SCAN FRAME (OCR Mode) */}
-          {activeTab === "ocr" && (
-            <div className="p-6">
-              <OCRUploader
-                onExtract={(text) => {
-                  console.log("OCR Result:", text);
-                }}
-              />
-            </div>
-          )}
-          {/* Optional Info */}
-          <div className="text-center text-gray-500 text-sm">
-            {activeTab === "barcode"
-              ? "Align the barcode inside the frame for best results."
-              : "Ensure ingredient text is clear and well-lit."}
+              <ForMeAnalysisCard analysis={analysis} />
+              {/* SCAN FRAME (OCR Mode) */}
+              {activeTab === "ocr" && (
+                <div className="p-6">
+                  <OCRUploader
+                    onExtract={(text) => {
+                      console.log("OCR Result:", text);
+                    }}
+                  />
+                </div>
+              )}
+              {/* Optional Info */}
+
+              <div className="text-center text-gray-500 text-sm">
+                {activeTab === "barcode"
+                  ? "Align the barcode inside the frame for best results."
+                  : "Ensure ingredient text is clear and well-lit."}
+              </div>
+            </CardContent>
           </div>
-        </CardContent>
-      </Card>
-    </div>
+        </Card>
+      </div>
+    </>
   );
 }
