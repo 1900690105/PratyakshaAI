@@ -7,12 +7,12 @@ function ProductInfo({ data }) {
   const product = data;
 
   return (
-    <div className="mt-6 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg overflow-hidden">
+    <div className="mt-6 bg-linear-to-br from-white to-gray-50 rounded-2xl shadow-lg overflow-hidden">
       {/* Header Section with Image */}
-      <div className="relative bg-gradient-to-r from-blue-500 to-purple-600 p-6 md:p-8">
+      <div className="relative bg-linear-to-r from-blue-500 to-purple-600 p-6 md:p-8">
         <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
           {product.image_front_url && (
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <Image
                 src={product.image_front_url}
                 alt={product.product_name}
@@ -52,7 +52,7 @@ function ProductInfo({ data }) {
       <div className="p-4 md:p-6 lg:p-8 space-y-6">
         {/* Nutrition Highlights */}
         {product.nutriments && (
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 md:p-6">
+          <div className="bg-linear-to-br from-green-50 to-emerald-50 rounded-xl p-4 md:p-6">
             <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
               <span className="text-green-600">📊</span> Nutrition Facts
               <span className="text-xs md:text-sm font-normal text-gray-500">
