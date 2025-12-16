@@ -65,6 +65,7 @@ export function ScanFood() {
   };
 
   const handleDetected = async (code) => {
+    alert(code);
     try {
       setLoading(true);
 
@@ -85,10 +86,6 @@ export function ScanFood() {
 
       const product = result.product;
 
-      // ✅ Save to Firestore
-      // await saveProductToFirestore(code, product);
-
-      // ✅ Update UI
       setData(product);
     } catch (err) {
       console.error(err);
@@ -160,7 +157,7 @@ export function ScanFood() {
                 <BarcodeScanner onDetected={handleDetected} />
                 <Button
                   className="mt-5"
-                  onClick={() => handleDetected("8906010500535")}
+                  onClick={() => handleDetected("8906010502591")}
                 >
                   Test Scan
                 </Button>
@@ -193,7 +190,7 @@ export function ScanFood() {
               )}
             </Button>
           </div>
-          &&
+
           <ForMeAnalysisCard analysis={analysis} />
           {/* SCAN FRAME (OCR Mode) */}
           {activeTab === "ocr" && (
