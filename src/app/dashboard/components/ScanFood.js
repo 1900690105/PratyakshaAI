@@ -15,23 +15,32 @@ import {
 } from "@/lib/productCache";
 import { ForMeAnalysisCard } from "./PersonalizeData";
 import { useRouter } from "next/navigation";
+import { db } from "@/lib/firebase";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp,
+  increment,
+} from "firebase/firestore";
 
-export function ScanFood() {
+export function ScanFood({ uid, form }) {
   const [activeTab, setActiveTab] = useState("barcode");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
   const [analysis, setAnalysis] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [show, setShow] = useState(false);
-  const router = useRouter();
+  const [verdictColor, setVerdictColor] = useState("");
+  const [sugertoday, setSugerToday] = useState(null);
 
   const userProfile = {
-    age: 28,
-    gender: "Male",
-    conditions: ["Diabetes"],
-    allergies: ["Milk", "Soy"],
-    diet: "Low Sugar",
-    goal: "Weight loss",
+    age: form.age || null,
+    gender: form.gender || "NA",
+    conditions: form.conditions || "NA",
+    allergies: form.allergies || "Na",
+    diet: form.diet || "NA",
+    goal: form.goal || "NA",
   };
 
   const handleForMe = async () => {
@@ -49,7 +58,7 @@ export function ScanFood() {
         body: JSON.stringify({
           userProfile,
           product: data,
-          uid: "a5KdQQZlqtbTa0FAkdduWJhG2SB3",
+          uid: uid,
         }),
       });
 
@@ -59,18 +68,23 @@ export function ScanFood() {
         throw new Error(result.error || "Analysis failed");
       }
 
-      console.log("For Me Analysis:", result);
       setAnalysis(result);
+      setSugerToday(result.total_suger_in_product || null);
+      console.log(result);
+
+      setVerdictColor(
+        result.overall_fit === "good"
+          ? "text-white text-green-600"
+          : result.overall_fit === "moderate"
+          ? "text-white text-yellow-600"
+          : "text-white bg-red-600"
+      );
     } catch (err) {
       console.error(err);
       alert("Failed to analyze product for you");
     } finally {
       setAnalyzing(false);
     }
-  };
-
-  const handleExtract = (text) => {
-    console.log("Extracted text:", text);
   };
 
   const handleDetected = async (code) => {
@@ -87,6 +101,8 @@ export function ScanFood() {
 
         // ✅ Use cached product
         setData(product);
+        console.log(product);
+
         setShow(true);
 
         // ✅ STOP here (important)
@@ -132,9 +148,57 @@ export function ScanFood() {
     }
   };
 
-  const startFakeScan = () => {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 2000);
+  const handleConsume = async () => {
+    if (!uid) {
+      console.error("UID missing");
+      return;
+    }
+
+    try {
+      const userRef = doc(db, "users", uid);
+      const snap = await getDoc(userRef);
+
+      const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+      const consumedSugar = sugertoday; // sugar user just consumed
+
+      if (!snap.exists()) {
+        // 🆕 First time user
+        await setDoc(userRef, {
+          sugar_today: consumedSugar,
+          sugar_date: today,
+          updatedAt: serverTimestamp(),
+        });
+      } else {
+        const data = snap.data();
+
+        if (data.sugar_date !== today) {
+          // 🔄 New day → reset sugar
+          await setDoc(
+            userRef,
+            {
+              sugar_today: consumedSugar,
+              sugar_date: today,
+              updatedAt: serverTimestamp(),
+            },
+            { merge: true }
+          );
+        } else {
+          // ➕ Same day → add sugar
+          await setDoc(
+            userRef,
+            {
+              sugar_today: increment(consumedSugar),
+              updatedAt: serverTimestamp(),
+            },
+            { merge: true }
+          );
+        }
+      }
+
+      alert(`${consumedSugar} Sugar updated successfully`);
+    } catch (error) {
+      console.error("Failed to update sugar_today:", error);
+    }
   };
 
   return (
@@ -213,7 +277,7 @@ export function ScanFood() {
               )}
               <ProductInfo data={data} />
               {show && (
-                <div className="flex justify-end">
+                <div className="flex justify-end gap-2">
                   <Button
                     onClick={handleForMe}
                     disabled={analyzing}
@@ -230,6 +294,14 @@ export function ScanFood() {
                         For Me
                       </>
                     )}
+                  </Button>
+
+                  <Button
+                    onClick={handleConsume}
+                    disabled={!analysis.overall_fit}
+                    className={`${verdictColor}  p-5 w-44 h-12 flex gap-2 items-center`}
+                  >
+                    Consume product
                   </Button>
                 </div>
               )}

@@ -3,8 +3,8 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 export async function getUserData(uid) {
-  const ref = doc(db, "users", uid);
-  const snap = await getDoc(ref);
+  const userRef = doc(db, "users", uid);
+  const snap = await getDoc(userRef);
 
   if (!snap.exists()) return null;
   return snap.data();

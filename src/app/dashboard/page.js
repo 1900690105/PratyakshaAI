@@ -27,10 +27,21 @@ import { logoutUser } from "@/lib/auth";
 
 const PratyakshaAIDashboard = () => {
   const router = useRouter();
-
   const [darkMode, setDarkMode] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("scan");
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    age: "",
+    gender: "",
+    conditions: "",
+    allergies: "",
+    diet: "",
+    dailysugerlimit: "",
+    goal: "",
+  });
 
   const { uid, loading } = useCurrentUser();
 
@@ -151,10 +162,19 @@ const PratyakshaAIDashboard = () => {
 
         {/* Content */}
         <main className="p-4 lg:p-8 space-y-6">
-          {activeTab === "dashboard" && <Dashboard darkMode={darkMode} />}
-          {activeTab === "scan" && <ScanFood darkMode={darkMode} />}
+          {activeTab === "dashboard" && (
+            <Dashboard darkMode={darkMode} uid={uid} />
+          )}
+          {activeTab === "scan" && (
+            <ScanFood darkMode={darkMode} uid={uid} form={form} />
+          )}
           {activeTab === "profile" && (
-            <ProfilePage uid={uid} darkMode={darkMode} />
+            <ProfilePage
+              uid={uid}
+              darkMode={darkMode}
+              form={form}
+              setForm={setForm}
+            />
           )}
         </main>
       </div>

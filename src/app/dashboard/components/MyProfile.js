@@ -1,25 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
 import { getUserData, updateUserData } from "@/lib/getUser";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2, User, Mail, Phone, Heart, Edit3 } from "lucide-react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
-export function ProfilePage({ uid }) {
+export function ProfilePage({ uid, form, setForm }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    age: "",
-    gender: "",
-    conditions: "",
-    allergies: "",
-    diet: "",
-  });
 
   // Step 2: Load Firestore user data
   useEffect(() => {
@@ -28,16 +18,25 @@ export function ProfilePage({ uid }) {
     async function loadData() {
       setLoading(true);
       try {
-        const data = await getUserData(uid);
-        if (data) {
-          setForm((prev) => ({
-            ...prev,
-            ...data,
-            email: data.email || prev.email,
-          }));
+        const userRef = doc(db, "users", uid);
+        const snap = await getDoc(userRef);
+
+        if (!snap.exists()) {
+          console.warn("User document does not exist for uid:", uid);
+          return;
         }
+
+        const data = snap.data();
+
+        setForm((prev) => ({
+          ...prev,
+          ...data,
+          email: data.email || prev.email,
+        }));
+
+        console.log("User data:", data);
       } catch (error) {
-        console.log(error);
+        console.error("Failed to load user data:", error);
       } finally {
         setLoading(false);
       }
@@ -95,6 +94,7 @@ export function ProfilePage({ uid }) {
             <input
               type="text"
               className="w-full p-3 border rounded-lg mt-1"
+              placeholder="Your Full Name"
               value={form.name}
               onChange={(e) => handleChange("name", e.target.value)}
             />
@@ -106,10 +106,12 @@ export function ProfilePage({ uid }) {
             <div className="relative">
               <Mail className="absolute left-3 top-3 text-gray-500" />
               <input
+                suppressHydrationWarning
                 type="email"
-                disabled
-                className="w-full p-3 pl-10 border rounded-lg bg-gray-100 cursor-not-allowed"
+                className="w-full p-3 pl-10 border rounded-lg "
+                placeholder="eg.nikhil55@gmail.com"
                 value={form.email}
+                onChange={(e) => handleChange("email", e.target.value)}
               />
             </div>
           </div>
@@ -123,6 +125,7 @@ export function ProfilePage({ uid }) {
                 type="text"
                 className="w-full p-3 pl-10 border rounded-lg"
                 value={form.phone || ""}
+                placeholder="eg.9112000000"
                 onChange={(e) => handleChange("phone", e.target.value)}
               />
             </div>
@@ -136,6 +139,7 @@ export function ProfilePage({ uid }) {
                 type="number"
                 className="w-full p-3 border rounded-lg mt-1"
                 value={form.age || ""}
+                placeholder="eg.22"
                 onChange={(e) => handleChange("age", e.target.value)}
               />
             </div>
@@ -168,6 +172,9 @@ export function ProfilePage({ uid }) {
               value={form.conditions || ""}
               onChange={(e) => handleChange("conditions", e.target.value)}
             />
+            <span className="text-sm text-gray-500 ml-2">
+              **If information is not available, leave this field blank.
+            </span>
           </div>
 
           {/* ALLERGIES */}
@@ -180,6 +187,9 @@ export function ProfilePage({ uid }) {
               value={form.allergies || ""}
               onChange={(e) => handleChange("allergies", e.target.value)}
             />
+            <span className="text-sm text-gray-500 ml-2">
+              **If information is not available, leave this field blank.
+            </span>
           </div>
 
           {/* DIET */}
@@ -198,6 +208,35 @@ export function ProfilePage({ uid }) {
               <option>Low Sugar</option>
               <option>High Protein</option>
             </select>
+          </div>
+          <div>
+            <label className="text-sm font-semibold">Goal</label>
+            <textarea
+              className="w-full p-3 border rounded-lg mt-1"
+              rows={2}
+              placeholder="weight loss,weight gain,heartattack etc."
+              value={form.goal || ""}
+              onChange={(e) => handleChange("goal", e.target.value)}
+            />
+            <span className="text-sm text-gray-500 ml-2">
+              **What you want to achive from using this platform.
+            </span>
+          </div>
+          <div>
+            <label className="text-sm font-semibold">Suger Daily limit</label>
+            <input
+              type="number"
+              className="w-full p-3 border rounded-lg mt-1"
+              value={form.dailysugerlimit || ""}
+              placeholder="eg.25gm"
+              min={0}
+              max={500}
+              onChange={(e) => handleChange("dailysugerlimit", e.target.value)}
+            />
+            <span className="text-sm text-gray-500 ml-2">
+              **WHO’s healthiest target Keep free sugar intake below 25 grams
+              per day for long-term health.{}
+            </span>
           </div>
 
           <Button

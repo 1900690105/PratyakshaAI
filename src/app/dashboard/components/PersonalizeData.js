@@ -8,6 +8,7 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect } from "react";
 
 export function ForMeAnalysisCard({ analysis }) {
   if (!analysis) return null;
