@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FileText, QrCode, Loader2, Image } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +14,7 @@ import {
   saveUserScan,
 } from "@/lib/productCache";
 import { ForMeAnalysisCard } from "./PersonalizeData";
+import { useRouter } from "next/navigation";
 
 export function ScanFood() {
   const [activeTab, setActiveTab] = useState("barcode");
@@ -22,7 +23,7 @@ export function ScanFood() {
   const [analysis, setAnalysis] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [show, setShow] = useState(false);
-  const uid = "a5KdQQZlqtbTa0FAkdduWJhG2SB3";
+  const router = useRouter();
 
   const userProfile = {
     age: 28,

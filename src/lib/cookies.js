@@ -1,23 +1,41 @@
-// lib/cookies.ts
-"use server";
-
+import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-export async function setAuthCookie(token) {
-  const cookieStore = await cookies(); // ⬅ IMPORTANT
+export async function POST(req) {
+  try {
+    const { token, uid } = await req.json();
 
-  cookieStore.set({
-    name: "auth_token",
-    value: token,
-    httpOnly: true,
-    secure: true,
-    sameSite: "strict",
-    path: "/",
-  });
-}
+    if (!token || !uid) {
+      return NextResponse.json(
+        { error: "Missing token or uid" },
+        { status: 400 }
+      );
+    }
 
-export async function clearAuthCookie() {
-  const cookieStore = await cookies(); // ⬅ IMPORTANT
+    const cookieStore = cookies();
 
-  cookieStore.delete("auth_token");
+    cookieStore.set("auth_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+    });
+
+    cookieStore.set("uid", uid, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error("Session error:", err);
+    return NextResponse.json(
+      { error: "Failed to create session" },
+      { status: 500 }
+    );
+  }
 }

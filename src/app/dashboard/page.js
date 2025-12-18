@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import {
   Home,
   Camera,
@@ -13,16 +14,46 @@ import {
   Sun,
   Moon,
   Menu,
+  LogOut,
 } from "lucide-react";
+
 import Dashboard from "./components/Dashboard";
 import Sidebar from "./components/Sidebar";
 import { ScanFood } from "./components/ScanFood";
 import { ProfilePage } from "./components/MyProfile";
+import { useCurrentUser } from "../components/GetUID";
+import { useRouter } from "next/navigation";
+import { logoutUser } from "@/lib/auth";
 
 const PratyakshaAIDashboard = () => {
+  const router = useRouter();
+
   const [darkMode, setDarkMode] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("scan");
+
+  const { uid, loading } = useCurrentUser();
+
+  // 🔐 AUTH GUARD (NO FLICKER)
+  useEffect(() => {
+    if (loading) return; // wait for auth check
+
+    if (!uid) {
+      router.replace("/auth/login");
+    }
+  }, [uid, loading, router]);
+
+  // ⏳ LOADING SCREEN
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-lg font-semibold">Checking authentication...</p>
+      </div>
+    );
+  }
+
+  // 🚫 EXTRA SAFETY
+  if (!uid) return null;
 
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: Home },
@@ -34,13 +65,19 @@ const PratyakshaAIDashboard = () => {
     { id: "settings", label: "Settings", icon: Settings },
   ];
 
+  // 🚪 LOGOUT
+  const handleLogout = async () => {
+    await logoutUser();
+    router.replace("/auth/login");
+  };
+
   return (
     <div
       className={`min-h-screen ${
         darkMode ? "bg-[#0D1117] text-white" : "bg-[#F7F9FA] text-gray-900"
       }`}
     >
-      {/* Sidebar - Desktop */}
+      {/* Sidebar */}
       <Sidebar
         menuItems={menuItems}
         darkMode={darkMode}
@@ -54,11 +91,11 @@ const PratyakshaAIDashboard = () => {
       <div className="lg:ml-64">
         {/* Top Navbar */}
         <header
-          className={`sticky top-0 z-20 ${
+          className={`sticky top-0 z-20 border-b ${
             darkMode
               ? "bg-[#161B22] border-[#2D3748]"
               : "bg-white border-gray-200"
-          } border-b`}
+          }`}
         >
           <div className="flex items-center justify-between px-4 lg:px-8 py-4">
             <div className="flex items-center gap-4">
@@ -68,10 +105,13 @@ const PratyakshaAIDashboard = () => {
               >
                 <Menu className="w-6 h-6" />
               </button>
-              <h1 className="text-xl lg:text-2xl font-bold">Dashboard</h1>
+              <h1 className="text-xl lg:text-2xl font-bold capitalize">
+                {activeTab}
+              </h1>
             </div>
 
-            <div className="flex items-center gap-2 lg:gap-4">
+            <div className="flex items-center gap-3">
+              {/* Search */}
               <div
                 className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-full ${
                   darkMode ? "bg-[#1E2329]" : "bg-gray-100"
@@ -80,95 +120,44 @@ const PratyakshaAIDashboard = () => {
                 <Search className="w-4 h-4 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search scans, products..."
-                  className="bg-transparent border-none outline-none text-sm w-48"
+                  placeholder="Search..."
+                  className="bg-transparent outline-none text-sm w-40"
                 />
               </div>
 
-              <button
-                className={`p-2 rounded-lg ${
-                  darkMode ? "hover:bg-[#1E2329]" : "hover:bg-gray-100"
-                }`}
-              >
+              {/* Notifications */}
+              <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#1E2329]">
                 <Bell className="w-5 h-5" />
               </button>
 
+              {/* Dark mode */}
               <button
                 onClick={() => setDarkMode(!darkMode)}
-                className={`p-2 rounded-lg ${
-                  darkMode ? "hover:bg-[#1E2329]" : "hover:bg-gray-100"
-                }`}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#1E2329]"
               >
-                {darkMode ? (
-                  <Sun className="w-5 h-5" />
-                ) : (
-                  <Moon className="w-5 h-5" />
-                )}
+                {darkMode ? <Sun /> : <Moon />}
               </button>
 
-              <div className="w-10 h-10 rounded-full bg-linear-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-semibold">
-                JD
-              </div>
+              {/* Logout */}
+              <button
+                onClick={handleLogout}
+                className="p-2 rounded-lg text-red-500 hover:bg-red-100 dark:hover:bg-red-900/20"
+              >
+                <LogOut className="w-5 h-5" />
+              </button>
             </div>
           </div>
         </header>
 
-        {/* Dashboard Content */}
+        {/* Content */}
         <main className="p-4 lg:p-8 space-y-6">
-          {activeTab == "dashboard" && <Dashboard darkMode={darkMode} />}
-          {activeTab == "scan" && <ScanFood darkMode={darkMode} />}
-          {activeTab == "profile" && <ProfilePage darkMode={darkMode} />}
+          {activeTab === "dashboard" && <Dashboard darkMode={darkMode} />}
+          {activeTab === "scan" && <ScanFood darkMode={darkMode} />}
+          {activeTab === "profile" && (
+            <ProfilePage uid={uid} darkMode={darkMode} />
+          )}
         </main>
       </div>
-
-      {/* Mobile Bottom Navigation */}
-      <nav
-        className={`lg:hidden fixed bottom-0 left-0 right-0 ${
-          darkMode
-            ? "bg-[#161B22] border-[#2D3748]"
-            : "bg-white border-gray-200"
-        } border-t`}
-      >
-        <div className="flex items-center justify-around py-3">
-          {[
-            { id: "dashboard", icon: Home, label: "Home" },
-            { id: "scan", icon: Camera, label: "Scan" },
-            { id: "history", icon: FileText, label: "History" },
-            { id: "profile", icon: User, label: "Profile" },
-          ].map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                className="flex flex-col items-center gap-1"
-              >
-                <Icon
-                  className={`w-6 h-6 ${
-                    isActive
-                      ? "text-[#0EAD69]"
-                      : darkMode
-                      ? "text-gray-400"
-                      : "text-gray-600"
-                  }`}
-                />
-                <span
-                  className={`text-xs ${
-                    isActive
-                      ? "text-[#0EAD69]"
-                      : darkMode
-                      ? "text-gray-400"
-                      : "text-gray-600"
-                  }`}
-                >
-                  {item.label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </nav>
     </div>
   );
 };
