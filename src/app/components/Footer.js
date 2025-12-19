@@ -116,7 +116,7 @@ function Footer() {
             </div>
           </div>
           <div className="border-t border-gray-800 pt-8 text-center">
-            <p>&copy; 2024 FoodScan. All rights reserved.</p>
+            <p>&copy; 2025-26 PratyakshaAI. All rights reserved.</p>
           </div>
         </div>
       </footer>

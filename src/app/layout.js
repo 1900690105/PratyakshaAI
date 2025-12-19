@@ -23,18 +23,19 @@ export const metadata = {
   metadataBase: new URL("https://pratyakshaai.vercel.app/"),
 
   title: {
-    default: "Food Scanner & Health Analyzer",
-    template: "%s | Food Scanner",
+    default: "PratyakshaAI:Food Scanner & Health Analyzer",
+    template: "%s | PratyakshaAI",
   },
 
   description:
     "Scan food barcodes and ingredients to analyze nutrition, sugar intake, allergens, and personalized health insights.",
 
-  applicationName: "Food Scanner",
+  applicationName: "PratyakshaAI",
   generator: "Next.js",
   referrer: "origin-when-cross-origin",
 
   keywords: [
+    "PratyakshaAI",
     "food scanner",
     "barcode scanner",
     "nutrition analysis",
@@ -43,11 +44,9 @@ export const metadata = {
     "ingredient analysis",
   ],
 
-  authors: [
-    { name: "Your Company Name", url: "https://pratyakshaai.vercel.app/" },
-  ],
-  creator: "Your Company Name",
-  publisher: "Your Company Name",
+  authors: [{ name: "PratyakshaAI", url: "https://pratyakshaai.vercel.app/" }],
+  creator: "PratyakshaAI",
+  publisher: "PratyakshaAI",
 
   robots: {
     index: true,
@@ -63,37 +62,37 @@ export const metadata = {
 
   /* -------- Open Graph -------- */
   openGraph: {
-    title: "Food Scanner & Health Analyzer",
+    title: "PratyakshaAI",
     description:
       "Instantly scan food and get nutrition, sugar, and health insights tailored to you.",
     url: "https://pratyakshaai.vercel.app/",
     siteName: "Food Scanner",
     images: [
       {
-        url: "/og-image.png",
+        url: "/logo1200630.png",
         width: 1200,
         height: 630,
-        alt: "Food Scanner App Preview",
+        alt: "PratyakshaAI App Preview",
       },
     ],
-    locale: "en_US",
+    locale: "en_IN",
     type: "website",
   },
 
   /* -------- Twitter -------- */
   twitter: {
     card: "summary_large_image",
-    title: "Food Scanner & Health Analyzer",
+    title: "PratyakshaAI",
     description:
       "Scan food barcodes to understand nutrition, sugar, and health impact.",
-    images: ["/og-image.png"],
+    images: ["/logo.png"],
     creator: "@yourhandle",
   },
 
   /* -------- Icons -------- */
   icons: {
     icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
+    shortcut: "/logo1616.png",
     apple: "/apple-touch-icon.png",
   },
 

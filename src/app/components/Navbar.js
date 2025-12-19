@@ -1,9 +1,12 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Camera, Menu, X } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen }) {
+  const router = useRouter();
   return (
     <>
       <nav
@@ -20,7 +23,7 @@ function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen }) {
                 <Camera className="w-6 h-6 text-white" />
               </div>
               <span className="text-xl font-bold text-gray-900 dark:text-white">
-                FoodScan
+                PratyakshaAI
               </span>
             </div>
 
@@ -46,7 +49,7 @@ function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen }) {
               </Link>
               <Button
                 onClick={() => {
-                  window.location.href = `/auth/login`;
+                  router.push(`/auth/login`);
                 }}
                 className="bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-xl"
               >
@@ -92,7 +95,7 @@ function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen }) {
               </a>
               <Button
                 onClick={() => {
-                  window.location.href = `auth/login`;
+                  router.push(`auth/login`);
                 }}
                 className="w-full bg-linear-to-r from-green-500 to-emerald-600 text-white rounded-xl"
               >

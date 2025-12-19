@@ -3,10 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 function ProductInfo({ data }) {
   const { barcode } = useParams();
+  const router = useRouter();
   if (!data) return null;
 
   const product = data;
@@ -20,7 +21,7 @@ function ProductInfo({ data }) {
             variant="secondary"
             size="sm"
             className="absolute top-3 left-3 sm:top-4 sm:left-4 flex items-center gap-1"
-            onClick={() => (window.location.href = "/dashboard")}
+            onClick={() => router.push("/dashboard")}
           >
             <ArrowLeft className="w-4 h-4" />
             <span className="hidden sm:inline">Back</span>

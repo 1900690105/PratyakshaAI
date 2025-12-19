@@ -21,11 +21,13 @@ import Image from "next/image";
 import { UserFlowSection } from "./components/UserFlowSection";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
+import { useRouter } from "next/navigation";
 
 export default function FoodScannerLanding() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -114,10 +116,10 @@ export default function FoodScannerLanding() {
 
     if (hasAuth) {
       // User logged in → Go to dashboard
-      window.location.href = "/dashboard";
+      router.push("/dashboard");
     } else {
       // Not logged in → Go to login
-      window.location.href = "/auth/login";
+      router("/auth/login");
     }
   };
 

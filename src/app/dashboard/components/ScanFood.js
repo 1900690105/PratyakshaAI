@@ -249,7 +249,7 @@ export function ScanFood({ uid, form, darkMode, sugertoday, setSugerToday }) {
             Barcode Scan
           </Button>
 
-          <Button
+          {/* <Button
             variant={activeTab === "ocr" ? "default" : "outline"}
             onClick={() => setActiveTab("ocr")}
             className={`flex items-center gap-2 ${
@@ -260,7 +260,7 @@ export function ScanFood({ uid, form, darkMode, sugertoday, setSugerToday }) {
           >
             <FileText className="w-4 h-4" />
             OCR Scan
-          </Button>
+          </Button> */}
         </div>
 
         {/* MAIN CARD */}
