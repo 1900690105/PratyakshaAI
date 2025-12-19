@@ -72,7 +72,9 @@ export default function RiskAlerts({ darkMode }) {
         });
 
         setAlerts(collected.slice(0, 6));
-        console.log("airesult firebase call");
+        if (process.env.NODE_ENV == "development") {
+          console.log("airesult firebase call");
+        }
       } catch (error) {
         console.error("Failed to load risk alerts:", error);
       } finally {

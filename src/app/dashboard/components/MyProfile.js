@@ -37,7 +37,9 @@ export function ProfilePage({ uid, form, setForm, darkMode }) {
           ...data,
           email: data.email || prev.email,
         }));
-        console.log("my profile firebase call");
+        if (process.env.NODE_ENV == "development") {
+          console.log("my profile firebase call");
+        }
       } catch (error) {
         console.error("Failed to load user data:", error);
       } finally {

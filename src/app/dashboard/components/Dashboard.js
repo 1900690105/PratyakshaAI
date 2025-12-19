@@ -54,10 +54,6 @@ export default function Dashboard({ darkMode, sugertoday }) {
   const [recentScans, setRecentScans] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    console.log(sugertoday);
-  }, []);
-
   /* ---------------------------
      LOAD RECENT SCANS
   ---------------------------- */
@@ -99,7 +95,9 @@ export default function Dashboard({ darkMode, sugertoday }) {
         }
 
         setRecentScans(scans);
-        console.log("dashboard firebase call");
+        if (process.env.NODE_ENV == "development") {
+          console.log("dashboard firebase call");
+        }
       } catch (error) {
         console.error("Dashboard load error:", error);
       } finally {

@@ -42,6 +42,8 @@ export function ScanFood({ uid, form, darkMode, sugertoday, setSugerToday }) {
     allergies: form.allergies || "Na",
     diet: form.diet || "NA",
     goal: form.goal || "NA",
+    sugertoday: sugertoday,
+    dailysugerlimit: form.dailysugerlimit,
   };
 
   const handleForMe = async () => {
@@ -71,7 +73,9 @@ export function ScanFood({ uid, form, darkMode, sugertoday, setSugerToday }) {
 
       setAnalysis(result);
       setSugerToday(result.total_suger_in_product || null);
-      console.log(result);
+      if (process.env.NODE_ENV == "development") {
+        console.log(result);
+      }
 
       setVerdictColor(
         result.overall_fit === "good"
@@ -102,7 +106,9 @@ export function ScanFood({ uid, form, darkMode, sugertoday, setSugerToday }) {
 
         // ✅ Use cached product
         setData(product);
-        console.log(product);
+        if (process.env.NODE_ENV == "development") {
+          console.log(product);
+        }
 
         setShow(true);
 

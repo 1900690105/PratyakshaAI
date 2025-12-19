@@ -77,7 +77,9 @@ export default function AnalysisOverview({ darkMode, uid }) {
           highSugar,
           allergens,
         });
-        console.log("analysis firebase call");
+        if (process.env.NODE_ENV == "development") {
+          console.log("analysis firebase call");
+        }
       } catch (err) {
         console.error("Analysis load failed:", err);
       } finally {

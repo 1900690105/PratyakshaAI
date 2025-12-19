@@ -58,7 +58,9 @@ export default function ScanHistory({ darkMode, uid }) {
         }
 
         setScans(results);
-        console.log("scan history productdetails,user_scans");
+        if (process.env.NODE_ENV == "development") {
+          console.log("scan history productdetails,user_scans");
+        }
       } catch (err) {
         console.error(err);
         setError("Failed to load scan history");
