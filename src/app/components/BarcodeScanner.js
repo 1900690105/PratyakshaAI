@@ -98,7 +98,7 @@ export default function BarcodeScanner({ onDetected, darkMode }) {
                 darkMode ? "border-emerald-500" : "border-indigo-500"
               }`}
             />
-            <div className="absolute top-1/2 left-0 w-full h-[2px] bg-red-500 animate-pulse" />
+            <div className="absolute top-1/2 left-0 w-full h-0.5 bg-red-500 animate-pulse" />
           </>
         )}
       </div>

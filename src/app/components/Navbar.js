@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Camera, Menu, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -20,7 +21,7 @@ function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen }) {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-linear-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
-                <Camera className="w-6 h-6 text-white" />
+                <Image src={"/cutlogo.png"} alt="logo" width={50} height={50} />
               </div>
               <span className="text-xl font-bold text-gray-900 dark:text-white">
                 PratyakshaAI
@@ -46,6 +47,18 @@ function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen }) {
                 className="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
               >
                 How It Works
+              </Link>
+              <Link
+                href="/about"
+                className="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
+              >
+                About Us
+              </Link>
+              <Link
+                href="/contact"
+                className="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
+              >
+                Contact Us
               </Link>
               <Button
                 onClick={() => {
@@ -75,24 +88,36 @@ function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen }) {
         {mobileMenuOpen && (
           <div className="md:hidden bg-white dark:bg-gray-900 border-t dark:border-gray-800">
             <div className="px-4 py-4 space-y-4">
-              <a
-                href="#home"
+              <Link
+                href="/"
                 className="block text-gray-700 dark:text-gray-300 hover:text-green-600"
               >
                 Home
-              </a>
-              <a
+              </Link>
+              <Link
                 href="#features"
                 className="block text-gray-700 dark:text-gray-300 hover:text-green-600"
               >
                 Features
-              </a>
-              <a
+              </Link>
+              <Link
                 href="#how-it-works"
                 className="block text-gray-700 dark:text-gray-300 hover:text-green-600"
               >
                 How It Works
-              </a>
+              </Link>
+              <Link
+                href="/about"
+                className="block text-gray-700 dark:text-gray-300 hover:text-green-600"
+              >
+                About Us
+              </Link>
+              <Link
+                href="/contact"
+                className="block text-gray-700 dark:text-gray-300 hover:text-green-600"
+              >
+                Contact Us
+              </Link>
               <Button
                 onClick={() => {
                   router.push(`auth/login`);

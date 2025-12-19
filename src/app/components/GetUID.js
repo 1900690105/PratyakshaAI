@@ -1,26 +1,3 @@
-// "use client";
-
-// import { useEffect, useState } from "react";
-
-// export function useCurrentUser() {
-//   const [uid, setUid] = useState(null);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     fetch("/api/me")
-//       .then((res) => {
-//         if (!res.ok) throw new Error("Not authenticated");
-//         return res.json();
-//       })
-//       .then((data) => {
-//         setUid(data.uid ?? null);
-//       })
-//       .catch(() => setUid(null))
-//       .finally(() => setLoading(false));
-//   }, []);
-
-//   return { uid, loading };
-// }
 "use client";
 
 import { useEffect, useState } from "react";

@@ -1,5 +1,6 @@
 "use client";
 import { LogOut, Shield, X } from "lucide-react";
+import Image from "next/image";
 import React from "react";
 
 function Sidebar({
@@ -19,12 +20,14 @@ function Sidebar({
             : "bg-white border-gray-200"
         } border-r transition-all z-30`}
       >
-        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="p-2 border-b border-gray-200 dark:border-gray-700 md:ml-16">
           <div className="flex items-center gap-2">
-            <Shield className="w-8 h-8 text-[#0EAD69]" />
-            <span className="text-xl font-bold text-[#1A1B1F] dark:text-white">
-              PratyakshaAI
-            </span>
+            <Image
+              src={"/logo1200630.png"}
+              alt="logo"
+              width={100}
+              height={30}
+            />
           </div>
         </div>
 
@@ -79,8 +82,7 @@ function Sidebar({
           >
             <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Shield className="w-8 h-8 text-[#0EAD69]" />
-                <span className="text-xl font-bold">PratyakshaAI</span>
+                <Image src={"/cutlogo.png"} alt="logo" width={50} height={50} />
               </div>
               <button onClick={() => setSidebarOpen(false)}>
                 <X className="w-6 h-6" />

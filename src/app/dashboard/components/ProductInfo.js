@@ -13,9 +13,9 @@ function ProductInfo({ data }) {
   const product = data;
 
   return (
-    <div className="mt-4 sm:mt-6 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg overflow-hidden">
+    <div className="mt-4 sm:mt-6 bg-linear-to-br from-white to-gray-50 rounded-2xl shadow-lg overflow-hidden">
       {/* HEADER */}
-      <div className="relative bg-gradient-to-r from-blue-500 to-purple-600 p-4 sm:p-6 md:p-8">
+      <div className="relative bg-linear-to-r from-blue-500 to-purple-600 p-4 sm:p-6 md:p-8">
         {barcode && (
           <Button
             variant="secondary"
@@ -74,7 +74,7 @@ function ProductInfo({ data }) {
       <div className="p-3 sm:p-4 md:p-6 lg:p-8 space-y-5 sm:space-y-6">
         {/* NUTRITION HIGHLIGHTS */}
         {product.nutriments && (
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 sm:p-6">
+          <div className="bg-linear-to-br from-green-50 to-emerald-50 rounded-xl p-4 sm:p-6">
             <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
               📊 Nutrition Facts
               <span className="text-xs sm:text-sm font-normal text-gray-500">
