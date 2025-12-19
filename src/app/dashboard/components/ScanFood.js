@@ -24,7 +24,7 @@ import {
   increment,
 } from "firebase/firestore";
 
-export function ScanFood({ uid, form }) {
+export function ScanFood({ uid, form, darkMode, sugertoday, setSugerToday }) {
   const [activeTab, setActiveTab] = useState("barcode");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
@@ -32,7 +32,8 @@ export function ScanFood({ uid, form }) {
   const [analyzing, setAnalyzing] = useState(false);
   const [show, setShow] = useState(false);
   const [verdictColor, setVerdictColor] = useState("");
-  const [sugertoday, setSugerToday] = useState(null);
+
+  const isDark = darkMode;
 
   const userProfile = {
     age: form.age || null,
@@ -204,10 +205,16 @@ export function ScanFood({ uid, form }) {
   return (
     <>
       <div className="space-y-6">
-        {/* Title */}
+        {/* TITLE */}
         <div>
-          <h1 className="text-3xl font-bold">Scan Food</h1>
-          <p className="text-gray-600 mt-1">
+          <h1
+            className={`text-3xl font-bold ${
+              isDark ? "text-white" : "text-gray-900"
+            }`}
+          >
+            Scan Food
+          </h1>
+          <p className={`mt-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
             Scan barcodes or ingredient lists to reveal food insights instantly.
           </p>
         </div>
@@ -217,7 +224,11 @@ export function ScanFood({ uid, form }) {
           <Button
             variant={activeTab === "barcode" ? "default" : "outline"}
             onClick={() => setActiveTab("barcode")}
-            className="flex items-center gap-2"
+            className={`flex items-center gap-2 ${
+              isDark && activeTab !== "barcode"
+                ? "border-gray-600 text-gray-300"
+                : ""
+            }`}
           >
             <QrCode className="w-4 h-4" />
             Barcode Scan
@@ -226,62 +237,89 @@ export function ScanFood({ uid, form }) {
           <Button
             variant={activeTab === "ocr" ? "default" : "outline"}
             onClick={() => setActiveTab("ocr")}
-            className="flex items-center gap-2"
+            className={`flex items-center gap-2 ${
+              isDark && activeTab !== "ocr"
+                ? "border-gray-600 text-gray-300"
+                : ""
+            }`}
           >
             <FileText className="w-4 h-4" />
             OCR Scan
           </Button>
         </div>
 
-        {/* MAIN CONTENT */}
-
-        <Card className="shadow border">
+        {/* MAIN CARD */}
+        <Card
+          className={`border shadow ${
+            isDark
+              ? "bg-[#161B22] border-[#2D3748]"
+              : "bg-white border-gray-200"
+          }`}
+        >
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle
+              className={`flex items-center gap-2 ${
+                isDark ? "text-white" : "text-gray-900"
+              }`}
+            >
               {activeTab === "barcode" ? (
                 <>
-                  <QrCode className="w-5 h-5 text-emerald-600" />
+                  <QrCode className="w-5 h-5 text-emerald-500" />
                   Barcode Scanner
                 </>
               ) : (
                 <>
-                  <FileText className="w-5 h-5 text-indigo-600" />
+                  <FileText className="w-5 h-5 text-indigo-500" />
                   Ingredient OCR Scanner
                 </>
               )}
             </CardTitle>
           </CardHeader>
+
           <div className="md:flex md:justify-center">
             <CardContent className="space-y-6">
-              {/* SCAN FRAME (Barcode Mode) */}
+              {/* BARCODE MODE */}
               {activeTab === "barcode" && (
                 <>
                   <div className="p-6">
-                    {!show && <BarcodeScanner onDetected={handleDetected} />}
-                    <div>
-                      <Button
-                        className="mt-5 flex gap-3 flex-col sm:flex-row md:w-[400px] w-[250px]"
-                        onClick={() => handleDetected("6111242100992")}
-                      >
-                        Test Scan
-                      </Button>
-                    </div>
+                    {!show && (
+                      <BarcodeScanner
+                        onDetected={handleDetected}
+                        darkMode={isDark}
+                      />
+                    )}
+
+                    <Button
+                      className="mt-5 md:w-[400px] w-[250px]"
+                      onClick={() => handleDetected("6111242100992")}
+                    >
+                      Test Scan
+                    </Button>
                   </div>
+
                   {loading && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <div
+                      className={`flex items-center gap-2 text-sm ${
+                        isDark ? "text-gray-400" : "text-gray-600"
+                      }`}
+                    >
                       <Loader2 className="w-4 h-4 animate-spin" />
                       Fetching product details...
                     </div>
                   )}
                 </>
               )}
-              <ProductInfo data={data} />
+
+              {/* PRODUCT INFO */}
+              <ProductInfo data={data} darkMode={isDark} />
+
+              {/* ACTION BUTTONS */}
               {show && (
                 <div className="flex justify-end gap-2">
                   <Button
                     onClick={handleForMe}
                     disabled={analyzing}
-                    className="bg-indigo-600 p-5 w-44 h-12 flex gap-2 items-center"
+                    className="bg-indigo-600 hover:bg-indigo-700 p-5 w-44 h-12 flex gap-2 items-center"
                   >
                     {analyzing ? (
                       <>
@@ -298,28 +336,36 @@ export function ScanFood({ uid, form }) {
 
                   <Button
                     onClick={handleConsume}
-                    disabled={!analysis.overall_fit}
-                    className={`${verdictColor}  p-5 w-44 h-12 flex gap-2 items-center`}
+                    disabled={!analysis?.overall_fit}
+                    className={`p-5 w-44 h-12 ${
+                      analysis?.overall_fit === "good"
+                        ? "bg-green-600 hover:bg-green-700 text-white"
+                        : analysis?.overall_fit === "moderate"
+                        ? "bg-yellow-500 hover:bg-yellow-600 text-black"
+                        : "bg-red-600 hover:bg-red-700 text-white"
+                    }`}
                   >
-                    Consume product
+                    Consume Product
                   </Button>
                 </div>
               )}
 
-              <ForMeAnalysisCard analysis={analysis} />
-              {/* SCAN FRAME (OCR Mode) */}
+              {/* AI ANALYSIS */}
+              <ForMeAnalysisCard analysis={analysis} darkMode={isDark} />
+
+              {/* OCR MODE */}
               {activeTab === "ocr" && (
                 <div className="p-6">
-                  <OCRUploader
-                    onExtract={(text) => {
-                      console.log("OCR Result:", text);
-                    }}
-                  />
+                  <OCRUploader onExtract={(text) => console.log(text)} />
                 </div>
               )}
-              {/* Optional Info */}
 
-              <div className="text-center text-gray-500 text-sm">
+              {/* FOOTER NOTE */}
+              <div
+                className={`text-center text-sm ${
+                  isDark ? "text-gray-400" : "text-gray-500"
+                }`}
+              >
                 {activeTab === "barcode"
                   ? "Align the barcode inside the frame for best results."
                   : "Ensure ingredient text is clear and well-lit."}

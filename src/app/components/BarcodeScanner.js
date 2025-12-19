@@ -2,18 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import { BrowserMultiFormatReader } from "@zxing/browser";
-import { Camera, Upload, Loader2 } from "lucide-react";
+import { Camera, Loader2 } from "lucide-react";
 
-export default function BarcodeScanner({ onDetected }) {
+export default function BarcodeScanner({ onDetected, darkMode }) {
   const videoRef = useRef(null);
-  const fileInputRef = useRef(null);
   const streamRef = useRef(null);
 
   const [scanning, setScanning] = useState(false);
   const [error, setError] = useState("");
-  const [previewImage, setPreviewImage] = useState(null);
 
-  // ✅ STOP CAMERA STREAM CLEANLY
+  /* -------------------------------
+     Stop Camera Cleanly
+  -------------------------------- */
   const stopCamera = () => {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop());
@@ -21,96 +21,110 @@ export default function BarcodeScanner({ onDetected }) {
     }
   };
 
+  /* -------------------------------
+     Start Scanner
+  -------------------------------- */
   const startScanner = async () => {
-    stopCamera(); // cleanup previous session
+    stopCamera();
     setScanning(true);
     setError("");
-    setPreviewImage(null);
 
     try {
       const codeReader = new BrowserMultiFormatReader();
-      const constraints = {
-        video: {
-          facingMode: { ideal: "environment" }, // rear camera on mobile
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
-        },
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: "environment" } },
         audio: false,
-      };
+      });
 
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
       streamRef.current = stream;
 
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        videoRef.current.setAttribute("playsinline", true); // iOS fix
+        videoRef.current.setAttribute("playsinline", true);
         await videoRef.current.play();
       }
 
-      // 🔥 Keep decoding video stream until barcode found
       await codeReader.decodeFromVideoDevice(
         null,
         videoRef.current,
-        (result, err) => {
+        (result) => {
           if (result) {
-            const code = result.getText();
             stopCamera();
             setScanning(false);
-
-            if (onDetected) onDetected(code);
+            onDetected?.(result.getText());
           }
         }
       );
     } catch (err) {
       console.error(err);
-      setError("Camera access blocked or unavailable.");
+      setError("Camera access denied or unavailable");
       setScanning(false);
       stopCamera();
     }
   };
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => stopCamera();
   }, []);
 
   return (
-    <div className="w-full space-y-6">
+    <div className="space-y-5">
       {/* TITLE */}
-      <h2 className="text-base font-bold flex items-center gap-2">
-        <Camera className="w-6 h-6 text-indigo-600" />
+      <h2
+        className={`flex items-center gap-2 font-semibold text-lg ${
+          darkMode ? "text-emerald-400" : "text-indigo-600"
+        } `}
+      >
+        <Camera
+          className={`w-6 h-6 ${
+            darkMode ? "text-emerald-400" : "text-indigo-600"
+          }`}
+        />
         Scan Product Barcode
       </h2>
 
-      {/* VIDEO SCANNER WINDOW */}
-      <div className="md:w-[400px] w-[250px]  aspect-video bg-black rounded-lg overflow-hidden relative">
+      {/* CAMERA WINDOW */}
+      <div
+        className={`relative md:w-[420px] w-full aspect-video rounded-xl overflow-hidden border ${
+          darkMode ? "bg-black border-[#2D3748]" : "bg-black border-gray-300"
+        }`}
+      >
         <video ref={videoRef} className="w-full h-full object-cover" />
 
         {scanning && (
           <>
-            <div className="absolute inset-0 border-2 border-indigo-500 rounded-lg animate-pulse"></div>
-            <div className="absolute top-1/2 left-0 w-full h-1 bg-red-500 animate-pulse"></div>
+            <div
+              className={`absolute inset-0 rounded-xl border-2 animate-pulse ${
+                darkMode ? "border-emerald-500" : "border-indigo-500"
+              }`}
+            />
+            <div className="absolute top-1/2 left-0 w-full h-[2px] bg-red-500 animate-pulse" />
           </>
         )}
       </div>
 
-      {error && <p className="text-red-600 text-sm">{error}</p>}
+      {/* ERROR */}
+      {error && <p className="text-sm text-red-500 font-medium">{error}</p>}
 
-      {/* BUTTONS */}
-      <div className="flex gap-3 flex-col sm:flex-row md:w-[400px] w-[250px]">
-        <button
-          onClick={startScanner}
-          className="flex-1 bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition"
-        >
-          {scanning ? (
-            <div className="flex items-center justify-center gap-2">
-              <Loader2 className="w-5 h-5 animate-spin" /> Scanning...
-            </div>
-          ) : (
-            "Start Camera Scan"
-          )}
-        </button>
-      </div>
+      {/* ACTION BUTTON */}
+      <button
+        onClick={startScanner}
+        disabled={scanning}
+        className={`w-full md:w-[420px] py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2 ${
+          darkMode
+            ? "bg-emerald-600 hover:bg-emerald-700 text-white"
+            : "bg-indigo-600 hover:bg-indigo-700 text-white"
+        }`}
+      >
+        {scanning ? (
+          <>
+            <Loader2 className="w-5 h-5 animate-spin" />
+            Scanning...
+          </>
+        ) : (
+          "Start Camera Scan"
+        )}
+      </button>
     </div>
   );
 }

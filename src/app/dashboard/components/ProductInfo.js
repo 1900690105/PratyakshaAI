@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 
 function ProductInfo({ data }) {
+  const { barcode } = useParams();
   if (!data) return null;
 
   const product = data;
@@ -10,6 +13,15 @@ function ProductInfo({ data }) {
     <div className="mt-6 bg-linear-to-br from-white to-gray-50 rounded-2xl shadow-lg overflow-hidden">
       {/* Header Section with Image */}
       <div className="relative bg-linear-to-r from-blue-500 to-purple-600 p-6 md:p-8">
+        {barcode && (
+          <Button
+            onClick={() => {
+              window.location.href = "/dashboard";
+            }}
+          >
+            <ArrowLeft />{" "}
+          </Button>
+        )}
         <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
           {product.image_front_url && (
             <div className="shrink-0">

@@ -24,6 +24,9 @@ import { ProfilePage } from "./components/MyProfile";
 import { useCurrentUser } from "../components/GetUID";
 import { useRouter } from "next/navigation";
 import { logoutUser } from "@/lib/auth";
+import ScanHistory from "./components/ScanHistory";
+import RiskAlerts from "./components/RiskAlerts";
+import AnalysisOverview from "./components/AnalysisOverview";
 
 const PratyakshaAIDashboard = () => {
   const router = useRouter();
@@ -42,7 +45,7 @@ const PratyakshaAIDashboard = () => {
     dailysugerlimit: "",
     goal: "",
   });
-
+  const [sugertoday, setSugerToday] = useState(0);
   const { uid, loading } = useCurrentUser();
 
   // 🔐 AUTH GUARD (NO FLICKER)
@@ -123,18 +126,6 @@ const PratyakshaAIDashboard = () => {
 
             <div className="flex items-center gap-3">
               {/* Search */}
-              <div
-                className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-full ${
-                  darkMode ? "bg-[#1E2329]" : "bg-gray-100"
-                }`}
-              >
-                <Search className="w-4 h-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="bg-transparent outline-none text-sm w-40"
-                />
-              </div>
 
               {/* Notifications */}
               <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#1E2329]">
@@ -163,10 +154,16 @@ const PratyakshaAIDashboard = () => {
         {/* Content */}
         <main className="p-4 lg:p-8 space-y-6">
           {activeTab === "dashboard" && (
-            <Dashboard darkMode={darkMode} uid={uid} />
+            <Dashboard darkMode={darkMode} uid={uid} sugertoday={sugertoday} />
           )}
           {activeTab === "scan" && (
-            <ScanFood darkMode={darkMode} uid={uid} form={form} />
+            <ScanFood
+              darkMode={darkMode}
+              uid={uid}
+              form={form}
+              sugertoday={sugertoday}
+              setSugerToday={setSugerToday}
+            />
           )}
           {activeTab === "profile" && (
             <ProfilePage
@@ -175,6 +172,15 @@ const PratyakshaAIDashboard = () => {
               form={form}
               setForm={setForm}
             />
+          )}
+          {activeTab === "history" && (
+            <ScanHistory uid={uid} darkMode={darkMode} />
+          )}
+          {activeTab === "alerts" && (
+            <RiskAlerts uid={uid} darkMode={darkMode} />
+          )}
+          {activeTab === "analysis" && (
+            <AnalysisOverview uid={uid} darkMode={darkMode} />
           )}
         </main>
       </div>

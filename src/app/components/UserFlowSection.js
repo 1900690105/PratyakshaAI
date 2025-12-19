@@ -9,8 +9,6 @@ import {
   User,
   Sparkles,
   CheckCircle,
-  AlertTriangle,
-  XCircle,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
