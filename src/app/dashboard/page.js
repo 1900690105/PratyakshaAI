@@ -27,6 +27,7 @@ import { logoutUser } from "@/lib/auth";
 import ScanHistory from "./components/ScanHistory";
 import RiskAlerts from "./components/RiskAlerts";
 import AnalysisOverview from "./components/AnalysisOverview";
+import SettingsComponent from "./components/Settings";
 
 const PratyakshaAIDashboard = () => {
   const router = useRouter();
@@ -47,6 +48,13 @@ const PratyakshaAIDashboard = () => {
   });
   const [sugertoday, setSugerToday] = useState(0);
   const { uid, loading } = useCurrentUser();
+
+  useEffect(() => {
+    const darkMode = localStorage.getItem("darkMode");
+    if (darkMode) {
+      setDarkMode(darkMode);
+    }
+  }, []);
 
   // 🔐 AUTH GUARD (NO FLICKER)
   useEffect(() => {
@@ -181,6 +189,15 @@ const PratyakshaAIDashboard = () => {
           )}
           {activeTab === "analysis" && (
             <AnalysisOverview uid={uid} darkMode={darkMode} />
+          )}
+          {activeTab === "settings" && (
+            <SettingsComponent
+              uid={uid}
+              darkMode={darkMode}
+              setDarkMode={setDarkMode}
+              form={form}
+              setForm={setForm}
+            />
           )}
         </main>
       </div>
