@@ -196,6 +196,15 @@ export function ScanFood({ uid, form, darkMode, sugertoday, setSugerToday }) {
         }
       }
 
+      await fetch("/api/sugar/consume", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          uid,
+          sugarConsumed: consumedSugar,
+        }),
+      });
+
       alert(`${consumedSugar} Sugar updated successfully`);
     } catch (error) {
       console.error("Failed to update sugar_today:", error);
@@ -319,7 +328,7 @@ export function ScanFood({ uid, form, darkMode, sugertoday, setSugerToday }) {
                   <Button
                     onClick={handleForMe}
                     disabled={analyzing}
-                    className="bg-indigo-600 hover:bg-indigo-700 p-5 w-44 h-12 flex gap-2 items-center"
+                    className="bg-indigo-600 hover:bg-indigo-700 p-5 md:w-44 md:h-12 flex gap-2 items-center"
                   >
                     {analyzing ? (
                       <>
@@ -337,7 +346,7 @@ export function ScanFood({ uid, form, darkMode, sugertoday, setSugerToday }) {
                   <Button
                     onClick={handleConsume}
                     disabled={!analysis?.overall_fit}
-                    className={`p-5 w-44 h-12 ${
+                    className={`p-5 md:w-44 w-30 md:h-12 h-10 ${
                       analysis?.overall_fit === "good"
                         ? "bg-green-600 hover:bg-green-700 text-white"
                         : analysis?.overall_fit === "moderate"
