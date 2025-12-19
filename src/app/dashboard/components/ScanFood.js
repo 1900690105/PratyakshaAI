@@ -32,7 +32,7 @@ export function ScanFood({ uid, form, darkMode, sugertoday, setSugerToday }) {
   const [analyzing, setAnalyzing] = useState(false);
   const [show, setShow] = useState(false);
   const [verdictColor, setVerdictColor] = useState("");
-
+  const [barcode, setBarcode] = useState("6111242100992");
   const isDark = darkMode;
 
   const userProfile = {
@@ -291,16 +291,29 @@ export function ScanFood({ uid, form, darkMode, sugertoday, setSugerToday }) {
               {activeTab === "barcode" && (
                 <>
                   <div className="p-6">
-                    {!show && (
-                      <BarcodeScanner
-                        onDetected={handleDetected}
-                        darkMode={isDark}
-                      />
-                    )}
-
+                    <div className="md:hidden sm:visible">
+                      {!show && (
+                        <BarcodeScanner
+                          onDetected={handleDetected}
+                          darkMode={isDark}
+                        />
+                      )}
+                    </div>
+                  </div>
+                  <div className="md:flex md:flex-col md:-mt-16 hidden">
+                    {" "}
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      placeholder="Enter barcode"
+                      value={barcode}
+                      onChange={(e) => setBarcode(e.target.value)}
+                      className="border p-2 rounded mt-2 md:w-[400px] w-[250px]"
+                    />
                     <Button
                       className="mt-5 md:w-[400px] w-[250px]"
-                      onClick={() => handleDetected("6111242100992")}
+                      disabled={!barcode}
+                      onClick={() => handleDetected(barcode)}
                     >
                       Test Scan
                     </Button>
