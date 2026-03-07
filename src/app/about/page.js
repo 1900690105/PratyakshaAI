@@ -74,7 +74,7 @@ const AboutUsPage = () => {
       year: "2022",
       title: "Founded",
       description:
-        "PratyakshaAI was born from a vision to democratize food transparency",
+        "Dailyscan was born from a vision to democratize food transparency",
     },
     {
       year: "2023",
@@ -120,7 +120,12 @@ const AboutUsPage = () => {
             <div className="flex items-center gap-2">
               <Link href={"/"}>
                 {" "}
-                <Image src={"/cutlogo.png"} alt="logo" width={50} height={50} />
+                <Image
+                  src={"/cutlogo2.png"}
+                  alt="logo"
+                  width={50}
+                  height={50}
+                />
               </Link>
             </div>
 
@@ -231,7 +236,7 @@ const AboutUsPage = () => {
             <div className="inline-flex items-center gap-2 bg-[#0EAD69]/10 px-4 py-2 rounded-full mb-6">
               <Sparkles className="w-4 h-4 text-[#0EAD69]" />
               <span className="text-sm font-semibold text-[#0EAD69]">
-                About PratyakshaAI
+                About Dailyscan
               </span>
             </div>
 
@@ -300,7 +305,7 @@ const AboutUsPage = () => {
               <h2 className="text-3xl lg:text-4xl font-bold mb-6">Our Story</h2>
               <div className="space-y-4 text-lg">
                 <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
-                  PratyakshaAI was founded in 2022 with a simple yet powerful
+                  Dailyscan was founded in 2022 with a simple yet powerful
                   vision: to give everyone the power to make informed decisions
                   about their food.
                 </p>
@@ -562,7 +567,7 @@ const AboutUsPage = () => {
                 darkMode ? "text-gray-400" : "text-gray-600"
               } mb-8 max-w-2xl mx-auto`}
             >
-              Be part of the food transparency revolution. Download PratyakshaAI
+              Be part of the food transparency revolution. Download Dailyscan
               today and start making informed, healthier choices.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -598,7 +603,7 @@ const AboutUsPage = () => {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <Shield className="w-8 h-8 text-[#0EAD69]" />
-                <span className="text-xl font-bold">PratyakshaAI</span>
+                <span className="text-xl font-bold">Dailyscan</span>
               </div>
               <p className="text-gray-400 text-sm">
                 Empowering healthier choices through AI-powered food
@@ -686,7 +691,7 @@ const AboutUsPage = () => {
           </div>
 
           <div className="border-t border-gray-800 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-400">
-            <p>© 2025 PratyakshaAI. All rights reserved.</p>
+            <p>© 2025 Dailyscan. All rights reserved.</p>
             <div className="flex gap-6">
               <Link href={"/"} className="hover:text-white transition">
                 Twitter

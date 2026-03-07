@@ -29,7 +29,7 @@ import RiskAlerts from "./components/RiskAlerts";
 import AnalysisOverview from "./components/AnalysisOverview";
 import SettingsComponent from "./components/Settings";
 
-const PratyakshaAIDashboard = () => {
+const DailyscanDashboard = () => {
   const router = useRouter();
   const [darkMode, setDarkMode] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -57,13 +57,13 @@ const PratyakshaAIDashboard = () => {
   }, []);
 
   // 🔐 AUTH GUARD (NO FLICKER)
-  useEffect(() => {
-    if (loading) return; // wait for auth check
+  // useEffect(() => {
+  //   if (loading) return; // wait for auth check
 
-    if (!uid) {
-      router.replace("/auth/login");
-    }
-  }, [uid, loading, router]);
+  //   if (!uid) {
+  //     router.replace("/auth/login");
+  //   }
+  // }, [uid, loading, router]);
 
   // ⏳ LOADING SCREEN
   if (loading) {
@@ -205,4 +205,4 @@ const PratyakshaAIDashboard = () => {
   );
 };
 
-export default PratyakshaAIDashboard;
+export default DailyscanDashboard;

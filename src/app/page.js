@@ -22,6 +22,10 @@ import { UserFlowSection } from "./components/UserFlowSection";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { useRouter } from "next/navigation";
+import WhyWeBuiltThis from "./components/WhyWeBuiltThis";
+import DemoPreview from "./components/DemoPreview";
+import Testimonials from "./components/Testimonials";
+import FinalCTA from "./components/FinalCTA";
 
 export default function FoodScannerLanding() {
   const [scrolled, setScrolled] = useState(false);
@@ -119,7 +123,7 @@ export default function FoodScannerLanding() {
       router.push("/dashboard");
     } else {
       // Not logged in → Go to login
-      router("/auth/login");
+      router.push("/auth/login");
     }
   };
 
@@ -141,10 +145,10 @@ export default function FoodScannerLanding() {
                 🌟 AI-Powered Food Intelligence
               </div>
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white leading-tight">
-                Scan Food.
+                See What You Eat.
                 <br />
                 <span className="text-transparent bg-clip-text bg-linear-to-r from-green-500 to-emerald-600">
-                  Know the Truth.
+                  Clearly.
                 </span>
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-300">
@@ -161,6 +165,9 @@ export default function FoodScannerLanding() {
                   Start Scanning <ChevronRight className="ml-2 w-5 h-5" />
                 </Button>
                 <Button
+                  onClick={() => {
+                    handleStartScan();
+                  }}
                   variant="outline"
                   className="text-lg px-8 py-6 rounded-xl border-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                 >
@@ -273,127 +280,22 @@ export default function FoodScannerLanding() {
           </div>
         </div>
       </section>
-
+      {/* UserFlowSection */}
       <UserFlowSection />
+      {/* WhyWeBuiltThis */}
+      <WhyWeBuiltThis />
 
       {/* Demo Preview */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-green-500 to-emerald-600 dark:from-green-900 dark:to-emerald-900">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              See It In Action
-            </h2>
-            <p className="text-xl text-white/90">
-              Try scanning any packaged food — see the truth in seconds.
-            </p>
-          </div>
-
-          <div className="relative mx-auto w-72 h-[600px] bg-gray-900 rounded-[3rem] p-4 shadow-2xl">
-            <div className="w-full h-full bg-white rounded-[2rem] overflow-hidden">
-              <div className="h-full flex flex-col">
-                <div className="flex-1 bg-linear-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                  <Camera className="w-24 h-24 text-gray-400 animate-pulse" />
-                </div>
-                <div className="p-6 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-gray-700">
-                      Health Score
-                    </span>
-                    <span className="text-2xl font-bold text-green-600">
-                      85/100
-                    </span>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="h-3 bg-green-200 rounded-full overflow-hidden">
-                      <div className="h-full w-4/5 bg-green-500 rounded-full"></div>
-                    </div>
-                    <div className="flex gap-2">
-                      <div className="flex-1 h-2 bg-green-300 rounded-full"></div>
-                      <div className="flex-1 h-2 bg-gray-200 rounded-full"></div>
-                      <div className="flex-1 h-2 bg-gray-200 rounded-full"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <DemoPreview />
 
       {/* Testimonials */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-950">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              Trusted by Health-Conscious Shoppers
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card
-                key={index}
-                className={`border-2 rounded-xl transition-all duration-500 ${
-                  currentTestimonial === index
-                    ? "border-green-500 shadow-xl scale-105"
-                    : "border-gray-200 dark:border-gray-800"
-                }`}
-              >
-                <CardContent className="p-8 space-y-4">
-                  <div className="flex text-yellow-400 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-current" />
-                    ))}
-                  </div>
-                  <p className="text-gray-700 dark:text-gray-300 italic">
-                    &#34;{testimonial.quote}&#34;
-                  </p>
-                  <div className="flex items-center space-x-4 pt-4">
-                    <div className="w-12 h-12 bg-linear-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold">
-                      {testimonial.image}
-                    </div>
-                    <div>
-                      <div className="font-bold text-gray-900 dark:text-white">
-                        {testimonial.name}
-                      </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
-                        {testimonial.role}
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Testimonials
+        testimonials={testimonials}
+        currentTestimonial={currentTestimonial}
+      />
 
       {/* Final CTA */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <Card className="border-0 bg-linear-to-br from-green-500 to-emerald-600 rounded-3xl overflow-hidden shadow-2xl">
-            <CardContent className="p-12 text-center space-y-8">
-              <h2 className="text-4xl md:text-5xl font-bold text-white">
-                Scan Healthier. Shop Smarter.
-              </h2>
-              <p className="text-xl text-white/90">
-                Join thousands of users making informed food decisions.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button className="bg-white text-green-600 hover:bg-gray-100 text-lg px-8 py-6 rounded-xl hover:scale-105 transition-transform">
-                  Start Scanning
-                </Button>
-                <Button
-                  variant="outline"
-                  className="border-2 border-white text-black hover:bg-white/10 text-lg px-8 py-6 rounded-xl transition-colors"
-                >
-                  Create Free Account
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+      <FinalCTA />
 
       {/* Footer */}
       <Footer />

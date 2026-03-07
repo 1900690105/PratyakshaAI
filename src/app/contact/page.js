@@ -96,7 +96,7 @@ const ContactPage = () => {
         "Our AI has 95% accuracy in identifying ingredients and analyzing nutritional content.",
     },
     {
-      question: "Is PratyakshaAI free to use?",
+      question: "Is Dailyscan free to use?",
       answer:
         "Yes! We offer a free tier with basic features. Premium plans unlock advanced analytics.",
     },
@@ -146,7 +146,7 @@ const ContactPage = () => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-2">
               <Shield className="w-8 h-8 text-[#0EAD69]" />
-              <span className="text-xl font-bold">PratyakshaAI</span>
+              <span className="text-xl font-bold">Dailyscan</span>
             </div>
 
             <div className="hidden md:flex items-center gap-8">
@@ -575,7 +575,7 @@ const ContactPage = () => {
                   darkMode ? "text-white" : "text-gray-900"
                 }`}
               >
-                PratyakshaAI Headquarters
+                Dailyscan Headquarters
               </p>
               <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
                 Shivaji Nager, Pune,Maharashtra, India - 411005
@@ -606,7 +606,7 @@ const ContactPage = () => {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <Shield className="w-8 h-8 text-[#0EAD69]" />
-                <span className="text-xl font-bold">PratyakshaAI</span>
+                <span className="text-xl font-bold">Dailyscan</span>
               </div>
               <p className="text-gray-400 text-sm">
                 Empowering healthier choices through AI-powered food
@@ -694,7 +694,7 @@ const ContactPage = () => {
           </div>
 
           <div className="border-t border-gray-800 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-400">
-            <p>© 2025 PratyakshaAI. All rights reserved.</p>
+            <p>© 2025 Dailyscan. All rights reserved.</p>
             <div className="flex gap-6">
               <a href="#" className="hover:text-white transition">
                 Twitter

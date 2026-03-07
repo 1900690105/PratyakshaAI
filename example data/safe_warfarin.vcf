@@ -1,0 +1,8 @@
+##fileformat=VCFv4.2
+##source=PharmaGuardSimulator
+##INFO=<ID=GENE,Number=1,Type=String,Description="Gene Symbol">
+##INFO=<ID=STAR,Number=1,Type=String,Description="Star Allele">
+##INFO=<ID=RS,Number=1,Type=String,Description="dbSNP rsID">
+#CHROM  POS        ID         REF ALT QUAL FILTER INFO
+chr10   96702047   rs9923231  C   T   .    .      GENE=VKORC1;STAR=*1;RS=rs9923231
+chr10   96541616   rs4244285  G   G   .    .      GENE=CYP2C9;STAR=*1;RS=rs1799853

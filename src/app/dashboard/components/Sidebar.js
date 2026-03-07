@@ -23,7 +23,7 @@ function Sidebar({
         <div className="p-2 border-b border-gray-200 dark:border-gray-700 md:ml-16">
           <div className="flex items-center gap-2">
             <Image
-              src={"/logo1200630.png"}
+              src={"/logo12006302.png"}
               alt="logo"
               width={100}
               height={30}
@@ -82,7 +82,12 @@ function Sidebar({
           >
             <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Image src={"/cutlogo.png"} alt="logo" width={50} height={50} />
+                <Image
+                  src={"/cutlogo2.png"}
+                  alt="logo"
+                  width={50}
+                  height={50}
+                />
               </div>
               <button onClick={() => setSidebarOpen(false)}>
                 <X className="w-6 h-6" />

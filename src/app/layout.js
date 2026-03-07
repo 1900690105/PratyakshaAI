@@ -20,22 +20,22 @@ const geistMono = Geist_Mono({
    SEO Metadata (Global)
 -------------------------------- */
 export const metadata = {
-  metadataBase: new URL("https://pratyakshaai.vercel.app/"),
+  metadataBase: new URL("https://Dailyscan.vercel.app/"),
 
   title: {
-    default: "PratyakshaAI:Food Scanner & Health Analyzer",
-    template: "%s | PratyakshaAI",
+    default: "Dailyscan:Food Scanner & Health Analyzer",
+    template: "%s | Dailyscan",
   },
 
   description:
     "Scan food barcodes and ingredients to analyze nutrition, sugar intake, allergens, and personalized health insights.",
 
-  applicationName: "PratyakshaAI",
+  applicationName: "Dailyscan",
   generator: "Next.js",
   referrer: "origin-when-cross-origin",
 
   keywords: [
-    "PratyakshaAI",
+    "Dailyscan",
     "food scanner",
     "barcode scanner",
     "nutrition analysis",
@@ -44,9 +44,9 @@ export const metadata = {
     "ingredient analysis",
   ],
 
-  authors: [{ name: "PratyakshaAI", url: "https://pratyakshaai.vercel.app/" }],
-  creator: "PratyakshaAI",
-  publisher: "PratyakshaAI",
+  authors: [{ name: "Dailyscan", url: "https://Dailyscan.vercel.app/" }],
+  creator: "Dailyscan",
+  publisher: "Dailyscan",
 
   robots: {
     index: true,
@@ -62,17 +62,17 @@ export const metadata = {
 
   /* -------- Open Graph -------- */
   openGraph: {
-    title: "PratyakshaAI",
+    title: "Dailyscan",
     description:
       "Instantly scan food and get nutrition, sugar, and health insights tailored to you.",
-    url: "https://pratyakshaai.vercel.app/",
+    url: "https://Dailyscan.vercel.app/",
     siteName: "Food Scanner",
     images: [
       {
-        url: "/logo1200630.png",
+        url: "/logo12006302.png",
         width: 1200,
         height: 630,
-        alt: "PratyakshaAI App Preview",
+        alt: "Dailyscan App Preview",
       },
     ],
     locale: "en_IN",
@@ -82,7 +82,7 @@ export const metadata = {
   /* -------- Twitter -------- */
   twitter: {
     card: "summary_large_image",
-    title: "PratyakshaAI",
+    title: "Dailyscan",
     description:
       "Scan food barcodes to understand nutrition, sugar, and health impact.",
     images: ["/logo.png"],

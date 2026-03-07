@@ -98,7 +98,7 @@ export default function LoginPage() {
           <LogIn className="w-12 h-12 mx-auto text-emerald-600" />
           <h2 className="text-2xl font-bold mt-2">Welcome Back</h2>
           <p className="text-gray-600 text-sm">
-            Login to continue to PratyakshaAI
+            Login to continue to Dailyscan
           </p>
         </div>
 

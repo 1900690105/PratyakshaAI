@@ -21,10 +21,15 @@ function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen }) {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-linear-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
-                <Image src={"/cutlogo.png"} alt="logo" width={50} height={50} />
+                <Image
+                  src={"/cutlogo2.png"}
+                  alt="logo"
+                  width={50}
+                  height={50}
+                />
               </div>
               <span className="text-xl font-bold text-gray-900 dark:text-white">
-                PratyakshaAI
+                Dailyscan
               </span>
             </div>
 
