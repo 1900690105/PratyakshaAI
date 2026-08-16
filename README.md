@@ -216,6 +216,11 @@ MIT License © 2025
 Dailyscan
 
 👨‍💻 Team
+GCOEY
+
+use Login Crendentials:
+email:xamip17818@roratu.com
+password:xamip17818
 
 Dailyscan
 Building responsible AI for healthier lives.
